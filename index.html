@@ -112,8 +112,14 @@
 
   function open(i) { cur = i; lbImg.src = cards[i].src; lightbox.classList.add('active'); }
   function close() { lightbox.classList.remove('active'); }
+  function openFromHash() {
+    const id = location.hash.slice(1);
+    const index = cards.findIndex(img => img.parentElement.id === id);
+    if (index !== -1) open(index);
+  }
 
   cards.forEach((img, i) => img.parentElement.addEventListener('click', () => open(i)));
+  window.addEventListener('hashchange', openFromHash);
   document.getElementById('lb-close').addEventListener('click', close);
   document.getElementById('lb-prev').addEventListener('click', () => { cur = (cur - 1 + cards.length) % cards.length; lbImg.src = cards[cur].src; });
   document.getElementById('lb-next').addEventListener('click', () => { cur = (cur + 1) % cards.length; lbImg.src = cards[cur].src; });
@@ -124,6 +130,7 @@
     if (e.key === 'ArrowRight') { cur = (cur + 1) % cards.length; lbImg.src = cards[cur].src; }
     if (e.key === 'Escape') close();
   });
+  openFromHash();
 </script>
 </body>
 </html>
